@@ -91,6 +91,7 @@ public class PhotoActivity extends Activity implements OnClickListener{
 		btDetect = (Button)findViewById(R.id.btDetect);
 		ivDisplay = (ImageView)findViewById(R.id.ivDisplay);
 		layoutResult = (LinearLayout)findViewById(R.id.layoutResult);
+		//layoutResult.setVisibility(View.GONE);
 		btDetect.setVisibility(View.GONE);
 		btPick.setOnClickListener(this);
 		btCapture.setOnClickListener(this);
@@ -150,6 +151,7 @@ public class PhotoActivity extends Activity implements OnClickListener{
 	    return path;
 	}
 	public void Detect(Mat mGray){
+		Imgproc.equalizeHist(mGray, mGray);
 		MatOfRect faces = new MatOfRect();
         if (cascadeClassifier != null) {
             cascadeClassifier.detectMultiScale(mGray, faces, 1.1, 3, 0, new Size(30,30),new Size());
@@ -171,6 +173,7 @@ public class PhotoActivity extends Activity implements OnClickListener{
         	Sign.myMap.put("image"+i, Utilities.convertMatToBitmap(subMat));
         	Sign sign = new Sign("unknown", "image"+i);
         	listSign.add(sign);
+        	
         	layoutResult.addView(ivv);
         	layoutResult.setOnTouchListener(new OnTouchListener() {
 				

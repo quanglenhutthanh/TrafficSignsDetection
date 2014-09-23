@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-   
-
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-     >
+>
     
     <org.opencv.android.JavaCameraView
         android:id="@+id/mCameraView"
@@ -22,7 +20,7 @@
         android:background="#7000"
         android:orientation="vertical"
         android:paddingBottom="0dp"
-        android:paddingTop="300dp" 
+        android:paddingTop="100dp" 
         android:id="@+id/listViewLayout"
         >
 

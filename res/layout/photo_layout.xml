@@ -3,11 +3,15 @@
     android:id="@+id/LinearLayout1"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical" 
+    android:layout_weight="1"
+    >
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content" 
+        android:layout_weight="0.05"
+        >
 
         <Button
             android:id="@+id/btPick"
@@ -29,20 +33,22 @@
         android:id="@+id/btDetect"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Detect" />
+        android:text="Detect" 
+    	android:layout_weight="0.05"/>
 
     <ImageView
         android:id="@+id/ivDisplay"
         android:layout_width="match_parent"
-        android:layout_height="322dp"
-        android:src="@drawable/camera_icon" />
+        android:layout_height="wrap_content"
+        android:src="@drawable/camera_icon" 
+        android:layout_weight="0.75"/>
 
     <LinearLayout
         android:id="@+id/layoutResult"
         android:orientation="horizontal" 
         android:layout_width="match_parent"
-        android:layout_height="match_parent" >
-
+        android:layout_height="wrap_content"
+        android:layout_weight="0.15">
     </LinearLayout>
 
 </LinearLayout>
