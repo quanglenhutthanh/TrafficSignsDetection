@@ -70,6 +70,7 @@ public class CameraActivity extends Activity implements CvCameraViewListener2{
 	private void Initialze(){
 		try {
 			mCameraView.enableView();
+			
 			InputStream is = getResources().openRawResource(R.raw.traffic_signs);
 			File cascadeDir = getDir("cascade", Context.MODE_PRIVATE);
 			File cascadeFile = new File(cascadeDir, "traffic_signs.xml");
@@ -95,7 +96,7 @@ public class CameraActivity extends Activity implements CvCameraViewListener2{
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		 getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 		setContentView(R.layout.camera_preview);
 		mCameraView = (CameraBridgeViewBase)findViewById(R.id.mCameraView);
 		listDetectedSigns = (ListView)findViewById(R.id.listView1);
@@ -104,7 +105,9 @@ public class CameraActivity extends Activity implements CvCameraViewListener2{
 		
 		
 		//listDetectedSigns.setAdapter(adapter);
+		 
 		listRelativeLayout.setVisibility(View.GONE);
+		
 		/*mCameraView = new NativeCameraView(this,0);
 		mCameraView.setOnTouchListener(new OnTouchListener() {
 			
@@ -150,14 +153,15 @@ public class CameraActivity extends Activity implements CvCameraViewListener2{
 		// TODO Auto-generated method stub
 		  // Create a grayscale image
 		mRgba = inputFrame.rgba();
+		
 		//mRgba.setTo)
         mGray = inputFrame.gray();
+        Imgproc.equalizeHist(mGray, mGray);
         MatOfRect faces = new MatOfRect();
-        
         if (cascadeClassifier != null) {
             cascadeClassifier.detectMultiScale(mGray, faces, 1.1, 3, 0, new Size(30,30),new Size());
         }
-        listSign = new ArrayList<Sign>();  
+       listSign = new ArrayList<Sign>();  
         // If there are any faces found, draw a rectangle around it
         Rect[] facesArray = faces.toArray();
         if(facesArray.length<=0){
@@ -172,27 +176,31 @@ public class CameraActivity extends Activity implements CvCameraViewListener2{
         	
         }
         for (int i = 0; i <facesArray.length; i++){
+        	final int ii = i;
         	Mat subMat = new Mat();
         	subMat = mRgba.submat(facesArray[i]);
         	Sign.myMap.put("image"+i, Utilities.convertMatToBitmap(subMat));
-        	Sign sign = new Sign("unknown", "image"+i);
-        	listSign.add(sign);
+        	
         	Core.rectangle(mRgba,facesArray[i].tl(), facesArray[i].br(), FACE_RECT_COLOR, 3);
+        	
         	runOnUiThread(new Runnable() {
 				
 				@Override
 				public void run() {
 					// TODO Auto-generated method stub
+					Sign sign = new Sign("unknown", "image"+ii);
+		        	listSign.add(sign);
 					listRelativeLayout.setVisibility(View.VISIBLE);
 					itemAdapter adapter= new itemAdapter(listSign, CameraActivity.this);
 					//listDetectedSigns.onc
+					adapter.notifyDataSetChanged();
 					listDetectedSigns.setAdapter(adapter);
 				}
 			});
         	
         }
         
-            //Core.rectangle(inputFrame, facesArray[i].tl(), facesArray[i].br(), new Scalar(0, 255, 0, 255), 3);
+        //Core.rectangle(inputFrame, facesArray[i].tl(), facesArray[i].br(), new Scalar(0, 255, 0, 255), 3);*/
         return mRgba;
 	}
 }
