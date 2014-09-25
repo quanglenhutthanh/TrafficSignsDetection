@@ -59,7 +59,6 @@ public class CameraActivity extends Activity implements CvCameraViewListener2{
 	            switch (status) {
 	                case LoaderCallbackInterface.SUCCESS:
 	                	mCameraView.enableView();
-	                	Initialze();
 	                	detector = new Detector(CameraActivity.this);
 	                    break;
 	                default:
@@ -71,33 +70,13 @@ public class CameraActivity extends Activity implements CvCameraViewListener2{
 	private Mat mRgba;
 	private Mat mGray;
 	
-	private void Initialze(){
 		//detector = new Detector(CameraActivity.this);
-		//loadCascadeFile(1, cascadeClassifier);
-		
-		try {
-			mCameraView.enableView();
-			
-			InputStream is = getResources().openRawResource(R.raw.biennguyhiem);
-			File cascadeDir = getDir("cascade", Context.MODE_PRIVATE);
-			File cascadeFile = new File(cascadeDir, "biennguyhiem.xml");
-			FileOutputStream os = new FileOutputStream(cascadeFile);
-			byte[] buffer = new byte[4096];
-            int bytesRead;
-            while ((bytesRead = is.read(buffer)) != -1) {
-                os.write(buffer, 0, bytesRead);
-            }
-            is.close();
-            os.close();
- 
- 
-            // Load the cascade classifier
-            cascadeClassifier = new CascadeClassifier(cascadeFile.getAbsolutePath());
-            
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+	private void Initialze(){
+		mCameraView = (CameraBridgeViewBase)findViewById(R.id.mCameraView);
+		listDetectedSigns = (ListView)findViewById(R.id.listView1);
+		listRelativeLayout = (RelativeLayout)findViewById(R.id.listViewLayout);
+		mCameraView.setCvCameraViewListener(this);
+		listRelativeLayout.setVisibility(View.GONE);
 	}
 	
 	@Override
@@ -105,11 +84,7 @@ public class CameraActivity extends Activity implements CvCameraViewListener2{
 		super.onCreate(savedInstanceState);
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 		setContentView(R.layout.camera_preview);
-		mCameraView = (CameraBridgeViewBase)findViewById(R.id.mCameraView);
-		listDetectedSigns = (ListView)findViewById(R.id.listView1);
-		listRelativeLayout = (RelativeLayout)findViewById(R.id.listViewLayout);
-		mCameraView.setCvCameraViewListener(this);
-		listRelativeLayout.setVisibility(View.GONE);
+		Initialze();
 	}
 	@Override
     public void onResume() {
@@ -138,26 +113,21 @@ public class CameraActivity extends Activity implements CvCameraViewListener2{
 
 	@Override
 	public Mat onCameraFrame(CvCameraViewFrame inputFrame) {
-		
-		// TODO Auto-generated method stub
-		  // Create a grayscale image
+		//TODO Auto-generated method stub
 		mRgba = inputFrame.rgba();
-		
-		//mRgba.setTo)
-        mGray = inputFrame.gray();
-        Imgproc.equalizeHist(mGray, mGray);
+		mGray = inputFrame.gray();
+        
+		Imgproc.equalizeHist(mGray, mGray);
         MatOfRect signs = new MatOfRect();
-        //faces.
-        /*if (cascadeClassifier != null) {
-            cascadeClassifier.detectMultiScale(mGray, signs, 1.1, 3, 0, new Size(30,30),new Size());
-        }*/
         listSign = new ArrayList<Sign>();  
+        
         detector.Detect(mGray, signs,1);
-        Rect[] facesArray = signs.toArray();
-        Draw(facesArray);
+        Rect[] prohibitionArray = signs.toArray();
+        Draw(prohibitionArray);
+        
         detector.Detect(mGray, signs,2);
-        Rect[] signssArray = signs.toArray();
-        Draw(signssArray); 
+        Rect[] dangerArray = signs.toArray();
+        Draw(dangerArray); 
         //Core.rectangle(inputFrame, facesArray[i].tl(), facesArray[i].br(), new Scalar(0, 255, 0, 255), 3);*/
         return mRgba;
 	}
