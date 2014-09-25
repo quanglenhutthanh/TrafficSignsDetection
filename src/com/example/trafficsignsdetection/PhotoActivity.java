@@ -109,7 +109,7 @@ public class PhotoActivity extends Activity implements OnClickListener{
 				cascadeFile = new File(cascadeDir, "lbpcascade_frontalface.xml");
 				break;
 			case 2:
-				is = getResources().openRawResource(R.raw.traffic_signs);
+				is = getResources().openRawResource(R.raw.bienbaocam);
 				cascadeFile = new File(cascadeDir, "traffic_signs.xml");
 				break;
 			case 3:
@@ -173,8 +173,8 @@ public class PhotoActivity extends Activity implements OnClickListener{
         	Sign.myMap.put("image"+i, Utilities.convertMatToBitmap(subMat));
         	Sign sign = new Sign("unknown", "image"+i);
         	listSign.add(sign);
-        	
         	layoutResult.addView(ivv);
+        	btDetect.setVisibility(View.GONE);
         	layoutResult.setOnTouchListener(new OnTouchListener() {
 				
 				@Override
